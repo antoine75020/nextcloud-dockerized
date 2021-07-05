@@ -1,0 +1,90 @@
+version: "3.8"
+services:
+  nextcloud-db:
+    image: mariadb:latest
+    container_name: nextcloud-db
+    hostname: nextcloud-db
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: unless-stopped
+    env_file: nextcloud.env
+    volumes:
+      - ./nextcloud-data-db:/var/lib/mysql
+    networks:
+      - internal
+    labels:
+      traefik.enable: false
+
+  nextcloud-redis:
+    image: redis:latest
+    container_name: nextcloud-redis
+    env_file: nextcloud.env
+    hostname: nextcloud-redis
+    restart: unless-stopped
+    networks:
+      - internal
+    labels:
+      traefik.enable: false
+
+  nextcloud-app:
+    image: nextcloud:fpm
+    container_name: nextcloud-app
+    hostname: nextcloud-app
+    restart: unless-stopped
+    env_file: nextcloud.env
+    depends_on:
+      - nextcloud-db
+      - nextcloud-redis
+    volumes:
+      - ./nextcloud-data/:/var/www/html
+      - /mnt/data/nextcloud/data/:/var/www/html/data ##Choose your data directory as a docker volume
+                                                      ##The path has to be created first
+    networks:
+      - internal
+    labels:
+      traefik.enable: false
+
+  nextcloud-web:
+    image: nginx:latest
+    container_name: nextcloud-web
+    hostname: nextcloud-web
+    restart: unless-stopped
+    env_file: nextcloud.env
+    depends_on:
+      - nextcloud-app
+    volumes:
+      - ./nextcloud-data/:/var/www/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - internal
+      - web
+    labels:
+      - traefik.http.routers.nextcloud-app.rule=Host(`nextcloud.your_domain.tld`) ##Use your own domain
+      - traefik.http.routers.nextcloud-app.tls=true
+      - traefik.http.routers.nextcloud-app.tls.certresolver=lets-encrypt
+      - traefik.port=80
+      - traefik.http.routers.nextcloud-app.middlewares=nextcloud-header
+      - traefik.http.middlewares.nextcloud-header.headers.stsSeconds=15552000
+      - traefik.http.middlewares.nextcloud-header.headers.customRequestHeaders.X-Forwarded-Proto=https
+
+  nextcloud-cron:
+    image: nextcloud:fpm
+    container_name: nextcloud-cron
+    hostname: nextcloud-cron
+    restart: unless-stopped
+    env_file: nextcloud.env
+    volumes_from:
+      - nextcloud-app
+    entrypoint: /cron.sh
+    depends_on:
+      - nextcloud-db
+      - nextcloud-redis
+    networks:
+      - internal
+    labels:
+      traefik.enable: false
+
+networks:
+  web:
+    external: true
+  internal:
+    external: false

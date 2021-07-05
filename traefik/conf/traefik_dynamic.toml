@@ -1,0 +1,12 @@
+[http.middlewares.simpleAuth.basicAuth]
+  users = [
+    "admin:pass" #put your hashed credentials here
+  ]
+
+[http.routers.api]
+  rule = "Host(`traefik.your_domain.tld`)" #use your own domain
+  entrypoints = ["websecure"]
+  middlewares = ["simpleAuth"]
+  service = "api@internal"
+  [http.routers.api.tls]
+    certResolver = "lets-encrypt"
