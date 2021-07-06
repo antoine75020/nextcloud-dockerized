@@ -99,7 +99,7 @@ I ran into two commons issues with this version of nextcloud. But i had to dig a
 
 1. Run a `<docker exec -it nextcloud-app apt update>`
 2. Then run `<docker exec -it nextcloud-app apt install imagemagick -y>`
-3. And run `<docker restart nextcloud-web>`
+3. And run `<docker restart nextcloud-app>`
 
 ### 2️⃣ */.well-known/webfinger* and */.well-known/nodeinfo*
 ![Capture d’écran 2021-07-05 à 17 13 23](https://user-images.githubusercontent.com/54755498/124501855-9a79ce80-ddc2-11eb-8494-655aecb6bd20.png)
