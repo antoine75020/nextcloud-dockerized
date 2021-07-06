@@ -35,7 +35,7 @@ I found this excellent work by [Terence Chateigné](https://www.padok.fr/blog/ne
 
 👉 https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04
 
-As i wrote theses lines, Traefik is on version v2.4.9, aka "Livarot" *(🧀 yes, for a french guy like me, versioning with cheese names is a very good reason to use it !)
+As i wrote theses lines, Traefik is on version v2.4.9, aka "Livarot" *(🧀 yes, for a french guy like me, versioning with cheese names is a very good reason to use it !)*
 
 ⚠️ I use the **_image:latest_** for all containers, exept for Traefik:
 > "Prefer a fixed version than the latest that could be an unexpected version. ex: traefik:v2.0.0" See [Traefik's documentation](https://doc.traefik.io/traefik/v2.0/getting-started/install-traefik/#use-the-official-docker-image)
@@ -47,7 +47,7 @@ As i wrote theses lines, Traefik is on version v2.4.9, aka "Livarot" *(🧀 yes,
 >
 >1. One Linux-based server with a **sudo non-root user** and a firewall.
 >2. **Docker** and **Docker Compose** installed on your server
->3. A domain and two A records,  *nextcloud.your_domain.tld* and *traefik.your_domain.tld* Each should point to the IP address of your server.
+>3. A domain and two **A records**,  *nextcloud.your_domain.tld* and *traefik.your_domain.tld*  Each should point to the IP address of your server.
 >
 >*(yes this is from the Keith's blog, again 😃)*
 
