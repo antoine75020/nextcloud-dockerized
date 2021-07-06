@@ -1,4 +1,4 @@
-# Nextcloud dockerized
+# Nextcloud dockerized with Traefik an  HTTP Strict Transport Security (HSTS)
 
 ## Intro
 This is my very personal log about my first steps with Docker in order to create a fresh Nextcloud instance.
